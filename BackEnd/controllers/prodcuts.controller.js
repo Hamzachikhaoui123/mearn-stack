@@ -22,13 +22,12 @@ export const createProducts=async (req, res) => {
 export const getProducts=async (req, res) => {
 
     try {
-        const { page = 1, limit = 10 } = req.query;
-        const offset = (page - 1) * limit;
-
-        const products = await Product.find({})
-        .skip(offset)
-        .limit(limit);
-        
+        // const { page = 1, limit = 10 } = req.query;
+        // const offset = (page - 1) * limit;
+        // const products = await Product.find({})
+        // .skip(offset)
+        // .limit(limit);
+        const products=await Product.find({})
         // Calculate the offset based on the page number and limit
         
         // Retrieve notes from the database with pagination
@@ -42,12 +41,16 @@ export const getProducts=async (req, res) => {
 
 export const deleteProduct = async(req,res)=>{
     const {id}=req.params;
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({success:false,message:"Invalid Product Id"});
+    }
 try {
     await Product.findByIdAndDelete(id);
     res.status(200).json({success:true,message:"product delete"})
     
 } catch (error) {
-    
+    res.status(500).json({success:false,message:"Server Error"})
+
 }
 }
 export const editProductMethode1= async(req,res)=>{
