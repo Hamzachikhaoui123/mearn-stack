@@ -22,7 +22,16 @@ export const createProducts=async (req, res) => {
 export const getProducts=async (req, res) => {
 
     try {
+        const { page = 1, limit = 10 } = req.query;
+        const offset = (page - 1) * limit;
+
         const products = await Product.find({})
+        .skip(offset)
+        .limit(limit);
+        
+        // Calculate the offset based on the page number and limit
+        
+        // Retrieve notes from the database with pagination
         return res.status(200).json({ success: true, data: products })
 
     } catch (error) {
